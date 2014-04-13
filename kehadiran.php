@@ -31,7 +31,9 @@ if (array_key_exists('action',$_POST)) {
 			$kursus_id = trim($_POST['kursus_id']);
 			$p = $pelajar->get_where( array( 'no_matrik' => $no_matrik ) );
 			//dumper($p);
-			if (array_key_exists('pelajar_id',$p[0]) && ( !$pelajar->in_kursus( $p[0]['pelajar_id'], $kursus_id ) )){
+			if (is_array($p[0]) 
+			&& array_key_exists('pelajar_id',$p[0]) 
+			&& ( !$pelajar->in_kursus( $p[0]['pelajar_id'], $kursus_id ) )) {
 				$pelajar->add_kursus( $p[0]['pelajar_id'], $kursus_id );
 			}
 			header('Location: kehadiran.php?kursus_id='.$kursus_id);
