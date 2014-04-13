@@ -78,7 +78,7 @@ $kehadiran = $kursus->kehadiran( $kursus_id );
 	<input type="hidden" name="kursus_id" value="<?php echo $kursus_id?>" />
 	<input type="text" name="tarikh_masa" value="" placeholder="contoh: 2014-01-01 10:30:00" />
 	<input type="submit" value="tambah kelas" /><br>
-	<em>YYYY-MM-DD HH:MM:SS dengan format 24-jam<br>contoh: 2014-01-01 00:10:00 untuk 1 Jan 2014, 10.30 pagi</em>
+	<em>YYYY-MM-DD HH:MM:SS dengan format 24-jam<br>contoh: 2014-01-01 10:30:00 untuk 1 Jan 2014, 10.30 pagi</em>
 </form>
 
 <form action="kehadiran.php" method="post">
