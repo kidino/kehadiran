@@ -1,14 +1,16 @@
 <?php
 include('autoload.php');
 
+$db = new dbconnection();
+
 if (array_key_exists('action',$_POST)) {
 
 
 	switch(trim($_POST['action'])){
-		case 'add_tarikh_masa': 
+		case 'add_tarikh_masa':
 			$kursus_id = trim($_POST['kursus_id']);
 			$tarikh_masa = trim($_POST['tarikh_masa']);
-			$kelas = new kelas();			
+			$kelas = new kelas($db);
 			if (validateMysqlDate($tarikh_masa)) {
 				$kelas->save( array(
 					'kursus_id' => $kursus_id,
@@ -18,7 +20,7 @@ if (array_key_exists('action',$_POST)) {
 			header('Location: kehadiran.php?kursus_id='.$kursus_id);
 			break;
 		case 'delete_kelas':
-			$kelas = new kelas();
+			$kelas = new kelas($db);
 			$kelas_id = trim($_POST['kelas_id']);
 			$thiskelas = $kelas->get($kelas_id);
 			$kelas->delete($kelas_id);
@@ -26,13 +28,13 @@ if (array_key_exists('action',$_POST)) {
 			header('Location: kehadiran.php?kursus_id='.$thiskelas['kursus_id']);
 			break;
 		case 'add_pelajar':
-			$pelajar = new pelajar();
+			$pelajar = new pelajar($db);
 			$no_matrik = trim($_POST['no_matrik']);
 			$kursus_id = trim($_POST['kursus_id']);
 			$p = $pelajar->get_where( array( 'no_matrik' => $no_matrik ) );
 			//dumper($p);
-			if (is_array($p[0]) 
-			&& array_key_exists('pelajar_id',$p[0]) 
+			if (is_array($p[0])
+			&& array_key_exists('pelajar_id',$p[0])
 			&& ( !$pelajar->in_kursus( $p[0]['pelajar_id'], $kursus_id ) )) {
 				$pelajar->add_kursus( $p[0]['pelajar_id'], $kursus_id );
 			}
@@ -40,8 +42,8 @@ if (array_key_exists('action',$_POST)) {
 			break;
 		case 'update_kehadiran':
 			$kursus_id = trim($_POST['kursus_id']);
-			$kursus = new kursus();
-			
+			$kursus = new kursus($db);
+
 			$khinput = $_POST['kehadiran'];
 			$kehadiran = array();
 			foreach($khinput as $k) {
@@ -52,7 +54,7 @@ if (array_key_exists('action',$_POST)) {
 					'hadir' => 'Y'
 				);
 			}
-			
+
 			$kursus->clear_kehadiran( $kursus_id );
 			$kursus->add_kehadiran( $kehadiran );
 			header('Location: kehadiran.php?kursus_id='.$kursus_id.'&updated=1');
@@ -62,9 +64,9 @@ if (array_key_exists('action',$_POST)) {
 
 $kursus_id = trim($_GET['kursus_id']);
 
-$kursus = new kursus();
+$kursus = new kursus($db);
 $kursus_info = $kursus->get( $kursus_id );
-$pensyarah = new pensyarah();
+$pensyarah = new pensyarah($db);
 $pensyarah_info = $pensyarah->get( $kursus_info['pensyarah_id'] );
 $kehadiran = $kursus->kehadiran( $kursus_id );
 
