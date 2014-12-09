@@ -1,13 +1,9 @@
 <?php
 
 class kelas extends dbmodel {
-	
+
 	var $idcol = 'kelas_id';
 	var $table = 'kelas';
-	
-	function __construct(){
-		parent::__construct();
-	}
 
 	function clear_kehadiran( $kelas_id ){
 		$sql = "delete from kehadiran where kelas_id = $kelas_id";
@@ -15,5 +11,5 @@ class kelas extends dbmodel {
 		$stmt->execute();
 		return $stmt->affected_rows;
 	}
-	
+
 }
